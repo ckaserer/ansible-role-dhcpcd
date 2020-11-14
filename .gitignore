@@ -1,0 +1,8 @@
+.idea/
+.DS_Store
+work/
+.vagrant/
+.ckaserer
+.vagrant/
+.k3s/*
+*.iml
