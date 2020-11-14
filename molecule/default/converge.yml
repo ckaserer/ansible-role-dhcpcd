@@ -1,0 +1,13 @@
+---
+
+- name: Converge
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - name: Include ansible-role-dhcpcd
+      include_role:
+        name: ansible-role-dhcpcd
+      vars:
+        reboot: false
+
+...

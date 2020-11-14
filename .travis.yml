@@ -1,0 +1,37 @@
+version: "~> 1.0"
+os: linux
+dist: xenial
+language: python
+python:
+- '3.6'
+services:
+- docker
+notifications:
+  email:
+    on_success: never
+    on_failure: never
+  slack:
+    if: branch = master
+    rooms:
+      secure: lmcdbxstBfQm8pchn5X4rjnO02K3m/xxMtvbuOKDQnlWjugvKD+l6gpXWlU2KDXL+0qE2fvApzgjPD2aoxUzFWkC+1u7LkIEDEtILm8ZBUi727k5hXK8Ei70lYXqE2079ND63b2OQ2J4t16KVa6gpylTZGh04Ty+ldpbFu95y+Nqzw3OEZ6Axvl+PfSpKFifH3+eWDve/xGvdW2jDaIVH+EVtZks2RpslB1r/fzhg7IP7/Urwr3dtSND9tU4gNnZDAaO/Z0rjUOg2YLRwrLgM65TwRGR7/hflCfetvqSfB2n0Mp7JWgRG525wxWtW778++EZyWpzYbIJkTQnscyag6hjbRCaf7i3XhgDf9kG+Y0AQa0Rv7qb2NpUzZ+QLrFI/uOLVstv3q9RCOWaFSbhDEq17eUBu9yaMwVTrfsSFm36zOnCasukAGr7n86wcLqG0gMytPE2nvWWEeEu1VI3Zl744qbdJcHJPV6+Lv2Tte1p5CpogKpjBVmyYKhB3U1zVa/yn9jMcRT57UxJZ654QVTMOzvwPSBWQgNipTWAAxfTCl3wpiTqx99RJ4ACYHMtu1zxw80a/TDmicJo5Bw08Pnr0d5znZfZ3eTICojZZWJjeCaBQcR6ukTH6PiOxPF4Meyg4azUoO335kK6jccYcl0qUWfm9BFxPB1lFNTf6zI=
+    template:
+    - "%{commit_subject}"
+    - build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) @%{branch}
+    - by %{author} %{result} in %{duration}
+    on_success: change
+    on_failure: always
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+install:
+- pip install -r requirements.txt
+- curl -Lo /tmp/merge.sh https://raw.githubusercontent.com/ckaserer/git-merge-script/master/merge.sh
+- chmod a+x /tmp/merge.sh
+env:
+  jobs:
+  - SCENARIO=default
+  global:
+  - secure: 7ZrT4qz1Lc3AYfpH1lGoXAkoUYqa8/d+9Fp5LFFeb3HVMINtViMaysfSFTnqkbL3vgo0I2fonkdcfzwsOPif+jOV1k3Cm694tJYvYhdoQo7gdR59OwpicdK4RVTOnN30upMltIj5bylh/h/8Xd7OddmsMmaxC8x2R9YsVDsIu7Gm/Ty5p4NTbW64N4h8/oGOyxb2yY7FZ1glIkAiVgFjI3PaZxhYIjpMYdmYVssUK+cQ6s1cavFFinS2x1TyQ3Uuw37zKwL562PQHz8pKlHhKPFI3ILO9xs3ix9/Ob5/9LOZvBGycDcDkNpSv+wNK8djcVgo39e4npZnvaQCzf8vw9CinV+TIrlkZzZQoYogZWvlLcCtr2ykSgxlltS8yZKggJ0ZpJYdWkC6ULnL8/m7xMSOCJ5NNsZlmPmLOHnnBx2lUBmNvK3rjmB79/qng/btaxQMqoTQDOK2YbjbSWqk1oAj2/ki2muCH7RtR+51KLHFvkAlryjcAvBt+pDJqcjY9wPuPHPMnUEqpX5wL4OqzuYD4xcwR9En4r91AGUyd6t2cmgQnM+tRqaQz6+JwrJUxh8Ht9pJ5fgUmL9Br4L2lkT9Sus09Ctz0FqZTrTxIdjm8Ky9At/TU4pAY7dKRK95DbS2Xn9Gy4lozQmZG8G/aToz2LRknLCSYGQyH5/0Hbo=
+script:
+- molecule test --scenario-name ${SCENARIO}
+after_success:
+- BRANCHES_TO_MERGE_REGEX='^develop' BRANCH_TO_MERGE_INTO=master GIT_REPO=${TRAVIS_REPO_SLUG}
+  GIT_SERVER=github.com /tmp/merge.sh

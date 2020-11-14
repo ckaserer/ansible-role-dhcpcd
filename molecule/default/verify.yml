@@ -1,0 +1,31 @@
+---
+
+- name: Verify
+  hosts: all
+  
+  vars:
+    dhcpcd_interface: "eth0"
+    dhcpcd_ip_address: "10.0.0.1/24"
+    dhcpcd_conf_location: "/etc/dhcpcd.conf"
+
+  tasks:
+
+    - name: Populate service facts
+      service_facts:
+
+    - name: Check dhcpcd service
+      assert:
+        that:
+          - ansible_facts.services['dhcpcd.service'].state == "running"
+          - ansible_facts.services['dhcpcd.service'].status == "enabled"
+    
+    - name: Check dhcpcd.conf
+      template:
+        src: dhcpcd.conf.j2
+        dest: "{{ dhcpcd_conf_location }}"
+        mode: "0644"
+      check_mode: true
+      register: dhcpcd_conf_result
+      failed_when: dhcpcd_conf_result.changed
+
+...
