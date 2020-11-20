@@ -1,5 +1,4 @@
 ---
-dhcpcd_interface: "eth0"
-dhcpcd_ip_address: "10.0.0.1/24"
-reboot: true
+# dhcpcd_interface: "eth0"
+# dhcpcd_ip_address: "10.0.0.1"
 ...

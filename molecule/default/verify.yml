@@ -1,5 +1,4 @@
 ---
-
 - name: Verify
   hosts: all
   
@@ -27,5 +26,4 @@
       check_mode: true
       register: dhcpcd_conf_result
       failed_when: dhcpcd_conf_result.changed
-
 ...

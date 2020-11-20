@@ -1,5 +1,3 @@
 ---
-
 dhcpcd_conf_location: "/etc/dhcpcd.conf"
-
 ...

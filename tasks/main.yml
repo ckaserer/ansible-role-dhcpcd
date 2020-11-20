@@ -1,4 +1,9 @@
 ---
+- name: Check if variables are set
+  fail:
+    msg: "dhcpcd_interface and dhcpcd_ip_address needs to be defined"
+  when:
+    - (dhcpcd_interface is not defined) or (dhcpcd_ip_address is not defined)
 
 - name: Install dhcpcd
   apt:
@@ -20,5 +25,4 @@
 
 - name: Force handler to be executed
   meta: flush_handlers
-
 ...

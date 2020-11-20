@@ -1,5 +1,4 @@
 ---
-
 - name: Converge
   hosts: all
   gather_facts: yes
@@ -9,5 +8,6 @@
         name: ansible-role-dhcpcd
       vars:
         reboot: false
-
+        dhcpcd_interface: "eth0"
+        dhcpcd_ip_address: "10.0.0.1"
 ...

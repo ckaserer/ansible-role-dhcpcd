@@ -1,5 +1,4 @@
 ---
-
 galaxy_info:
   author: ckaserer
   description: basic dhcpcd configuration
@@ -19,7 +18,8 @@ galaxy_info:
   galaxy_tags:
     - k3s
     - raspberry
+    - dhcpcd
+    - dhcp
 
 dependencies: []
-
 ...
